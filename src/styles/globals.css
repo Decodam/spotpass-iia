@@ -1,0 +1,63 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+/* Generate Theme = https://ui.jln.dev/ */
+
+@layer base {
+  :root {
+    --background: 154 100% 100%;
+    --foreground: 154 5% 10%;
+    --card: 154 50% 100%;
+    --card-foreground: 154 5% 15%;
+    --popover: 154 100% 100%;
+    --popover-foreground: 154 100% 10%;
+    --primary: 154 100% 38%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 154 30% 90%;
+    --secondary-foreground: 0 0% 0%;
+    --muted: 116 30% 95%;
+    --muted-foreground: 154 5% 40%;
+    --accent: 116 30% 90%;
+    --accent-foreground: 154 5% 15%;
+    --destructive: 0 100% 50%;
+    --destructive-foreground: 154 5% 100%;
+    --border: 154 30% 82%;
+    --input: 154 30% 50%;
+    --ring: 154 100% 38%;
+    --radius: 0.5rem;
+   }
+
+   .dark {
+    --background: 154 10% 5%;
+    --foreground: 154 0% 90%;
+    --card: 154 0% 4%;
+    --card-foreground: 154 0% 90%;
+    --popover: 154 10% 5%;
+    --popover-foreground: 154 0% 90%;
+    --primary: 154 100% 38%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 154 10% 10%;
+    --secondary-foreground: 0 0% 100%;
+    --muted: 116 10% 15%;
+    --muted-foreground: 154 0% 60%;
+    --accent: 116 10% 15%;
+    --accent-foreground: 154 0% 90%;
+    --destructive: 0 50% 30%;
+    --destructive-foreground: 154 0% 90%;
+    --border: 154 20% 18%;
+    --input: 154 20% 18%;
+    --ring: 154 100% 38%;
+    --radius: 0.5rem;
+   }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
