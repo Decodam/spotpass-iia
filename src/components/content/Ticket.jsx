@@ -9,7 +9,7 @@ const eventDetails = {
   location: "Mohit Moitra Mancha",
   timings: "1pm-5pm",
   date: "September 15, 2024",
-  duration: "01:00 PM - 05:O0 PM"
+  duration: "01:00 PM - 05:00 PM"
 }
 
 const Ticket = ({ ticketId, name, email, batch, isAdmitted, isVeg, isFoodDelivered }) => {
