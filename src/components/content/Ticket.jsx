@@ -6,10 +6,10 @@ import { IconMoodCheck, IconSalad } from '@tabler/icons-react'
 
 const eventDetails = {
   name: "IIA - Teachers Day 2024",
-  location: "Mohit Mitra Mancha",
-  timings: "10am-1pm",
-  date: "September 5, 2024",
-  duration: "10:00 AM - 1:00 PM"
+  location: "Mohit Moitra Mancha",
+  timings: "1pm-5pm",
+  date: "September 15, 2024",
+  duration: "01:00 PM - 05:O0 PM"
 }
 
 const Ticket = ({ ticketId, name, email, batch, isAdmitted, isVeg, isFoodDelivered }) => {
