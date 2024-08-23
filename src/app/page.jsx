@@ -1,4 +1,4 @@
-import Todo from "@/components/content/Todo";
+import Ticket from "@/components/content/Ticket";
 import { Button } from "@/components/ui/button";
 import { IconChevronRight } from "@tabler/icons-react";
 import Link from "next/link";
@@ -13,7 +13,6 @@ export default function Home() {
         <div className="flex justify-center">
           <Link
             className="inline-flex items-center gap-x-2 transition border hover:bg-muted/40 text-sm p-1 ps-3 rounded-full"
-            target="_blank"
             href="/buy-ticket"
           >
             Buy Tickets - Book your spot now
@@ -51,6 +50,12 @@ export default function Home() {
       </div>
 
 
+      <div id="tickets" className="container max-w-screen-lg my-20 space-y-6">
+        <h1 className="text-4xl font-bold text-center mb-8">Your Tickets</h1>
+
+        <Ticket name="Arghya Mondal" email="arghyamondal.work@gmail.com" batch="3rd year" ticketId="1255faw849wf" />
+        <Ticket name="John Doe" email="example@email.com" batch="2nd year" ticketId="12658das756as" />
+      </div>
 
     </>
   );

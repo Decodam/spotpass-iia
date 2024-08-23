@@ -57,6 +57,7 @@ export async function getUserProfile(userId) {
 
 
     return {
+      uid: userId,
       displayName: data.full_name,
       email: data.email,
       avatarUrl: data.avatar_url,
