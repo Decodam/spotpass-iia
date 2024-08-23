@@ -4,11 +4,12 @@ import { cn } from "@/utils/cn.utils";
 import { ThemeProvider } from "@/context/themeProvider"; 
 import Navbar from "@/components/content/Navbar";
 import Footer from "@/components/content/Footer";
+import { Toaster } from "@/components/ui/toaster"
 
 
 export const metadata = {
-  title: "spotpass - Auth Template",
-  description: "Starter kit for supabase and next js",
+  title: "Glitch a Gala",
+  description: "Join us on 5th September for Teacher's day celebration with IIA family",
 };
 
 const fontSans = FontSans({
@@ -35,6 +36,7 @@ export default function RootLayout({ children }) {
           <Navbar />
           {children}
           <Footer />
+          <Toaster />
         </ThemeProvider>
       </body>
     </html>

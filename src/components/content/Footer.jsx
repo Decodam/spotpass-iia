@@ -22,7 +22,7 @@ export default function Footer() {
           </p>
           <span className="hidden md:inline text-muted-foreground">•</span>
           <Link
-            href="https://github.com/Decodam/spotpass"
+            href="https://github.com/Decodam/supanext"
             target="_blank"
             rel="noopener noreferrer"
             className="flex items-center gap-1 text-xs font-medium underline underline-offset-4"

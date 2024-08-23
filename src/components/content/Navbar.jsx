@@ -19,7 +19,7 @@ export default async function Navbar({}) {
     <nav className="container h-14 flex justify-between items-center">
       <Link href={"/"}>
         <div className="flex items-end gap-2">
-          <Image height={28} width={28} src="/icon.svg" alt="supabase" /> <span className="text-lg font-bold max-sm:hidden">Spotpass - IIA</span>
+          <Image height={28} width={28} src="/icon.svg" alt="supabase" /> <span className="text-lg font-bold max-sm:hidden">Glitch a Gala</span>
         </div>
       </Link>
 

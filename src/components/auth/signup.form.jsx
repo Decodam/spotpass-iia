@@ -18,8 +18,6 @@ export default function SignupForm({ borderless, className }) {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [password2, setPassword2] = useState('')
-  const [profileImage, setProfileImage] = useState(null)
-  const fileInputRef = useRef(null)
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
@@ -28,7 +26,6 @@ export default function SignupForm({ borderless, className }) {
     setEmail('');
     setPassword('');
     setPassword2('');
-    setProfileImage(null);
     setError('');
     setLoading(false)
     
@@ -68,27 +65,6 @@ export default function SignupForm({ borderless, className }) {
     
   }
 
-  const handleGoogleSignup = () => {
-    // Handle Google signup logic here
-    console.log('Google signup')
-  }
-
-  const handleFacebookSignup = () => {
-    // Handle Facebook signup logic here
-    console.log('Facebook signup')
-  }
-
-  const handleImageUpload = (e) => {
-    const file = e.target.files?.[0]
-    if (file) {
-      const reader = new FileReader()
-      reader.onloadend = () => {
-        setProfileImage(reader.result)
-      }
-      reader.readAsDataURL(file)
-    }
-  }
-
   return (
     <Card className={`w-full max-w-md ${borderless && "border-none shadow-none bg-background"} mx-auto ${className && className}`}>
       <CardHeader className="space-y-1">
@@ -97,7 +73,7 @@ export default function SignupForm({ borderless, className }) {
         </Link>
         <CardTitle className="text-2xl font-bold text-center">Create an Account</CardTitle>
         <CardDescription className="text-center">
-          Sign up to get started with spotpass
+          Sign up to get started with your account
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">
@@ -153,66 +129,13 @@ export default function SignupForm({ borderless, className }) {
               required 
             />
           </div>
-          <div className="space-y-1">
-            <Label htmlFor="profileImage">Profile Picture</Label>
-            <div className="flex items-center space-x-2">
-              {profileImage && (
-                <Avatar>
-                  <AvatarImage className="aspect-auto" src={profileImage} />
-                  <AvatarFallback>{}</AvatarFallback>
-                </Avatar>
-              )}
-              <Button 
-                type="button" 
-                variant="outline" 
-                onClick={() => fileInputRef.current?.click()}
-              >
-                <IconUpload className="mr-2 h-4 w-4" />
-                Upload Image
-              </Button>
-              <input
-                type="file"
-                ref={fileInputRef}
-                onChange={handleImageUpload}
-                accept="image/*"
-                className="hidden"
-              />
-            </div>
-          </div>
           <div>
             <Button disabled={loading} type="submit" className="w-full mt-4">
               {loading ? <IconLoader2 className='animate-spin' /> : "Sign Up with Email"}
             </Button>
           </div>
         </form>
-        <div className="relative">
-          <div className="absolute inset-0 flex items-center">
-            <span className="w-full border-t" />
-          </div>
-          <div className="relative flex justify-center text-xs uppercase">
-            <span className="bg-background px-2 text-muted-foreground">
-              Or sign up with
-            </span>
-          </div>
-        </div>
-        <div className="space-y-2">
-          <Button 
-            variant="outline" 
-            className="w-full" 
-            onClick={handleGoogleSignup}
-          >
-            <IconBrandGoogle className="mr-2" />
-            Sign up with Google
-          </Button>
-          <Button 
-            variant="outline" 
-            className="w-full" 
-            onClick={handleFacebookSignup}
-          >
-            <IconBrandFacebook className="mr-2" />
-            Sign up with Facebook
-          </Button>
-        </div>
+
         <div className="text-center text-sm">
           Already have an account?{" "}
           <Link href="/login" className="text-primary hover:underline">

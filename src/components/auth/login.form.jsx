@@ -67,40 +67,13 @@ export default function LoginForm({borderless, className}) {
           <Link href={"/"} className='mx-auto mb-4 mt-2'>
             <Image height={40} width={40} src="/icon.svg" alt="supabase" /> 
           </Link>
-          <CardTitle className="text-2xl font-bold text-center">Login to spotpass</CardTitle>
+          <CardTitle className="text-2xl font-bold text-center">Login to Event</CardTitle>
           <CardDescription className="text-center">
             Choose your preferred login method
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
-          <div className="space-y-2">
-            <Button 
-              variant="outline" 
-              className="w-full" 
-              onClick={handleGoogleLogin}
-            >
-              <IconBrandGoogle className='mr-2' />
-              Login with Google
-            </Button>
-            <Button 
-              variant="outline" 
-              className="w-full" 
-              onClick={handleFacebookLogin}
-            >
-              <IconBrandFacebook className='mr-2' />
-              Login with Facebook
-            </Button>
-          </div>
-          <div className="relative">
-            <div className="absolute inset-0 flex items-center">
-              <span className="w-full border-t" />
-            </div>
-            <div className="relative flex justify-center text-xs uppercase">
-              <span className="bg-background px-2 text-muted-foreground">
-                Or continue with
-              </span>
-            </div>
-          </div>
+
           <form className='space-y-2' onSubmit={handleEmailLogin}>
             {error && <p className='text-xs text-destructive dark:text-red-500 text-center'>{error}</p>}
             <div className="space-y-1">
@@ -135,6 +108,7 @@ export default function LoginForm({borderless, className}) {
               </Link>
             </div>
           </form>
+
         </CardContent>
         <CardFooter>
           <p className="text-xs text-center text-muted-foreground w-full">

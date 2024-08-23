@@ -12,7 +12,7 @@ export async function updateSession(request) {
     {
       cookies: {
         getAll() {
-          return request.cookies.getAll()
+          return request.cookies.getAll();
         },
         setAll(cookiesToSet) {
           cookiesToSet.forEach(({ name, value, options }) => request.cookies.set(name, value))
@@ -27,37 +27,46 @@ export async function updateSession(request) {
     }
   )
 
-  // IMPORTANT: Avoid writing any logic between createServerClient and
-  // supabase.auth.getUser(). A simple mistake could make it very hard to debug
-  // issues with users being randomly logged out.
+  // Define protected and auth URLs
+  const protectedUrls = ['/buy-ticket'] 
+  const adminUrls = ['/admin', '/verify']  
+  const authUrls = ['/login', '/signup']
 
+  // Get the user session
   const {
     data: { user },
   } = await supabase.auth.getUser()
 
-  if (
-    !user &&
-    !request.nextUrl.pathname.startsWith('/login') &&
-    !request.nextUrl.pathname.startsWith('/signup')
-  ) {
-    // no user, potentially respond by redirecting the user to the login page
-    const url = request.nextUrl.clone()
-    url.pathname = '/login'
-    return NextResponse.redirect(url)
+  // If user is not authenticated and trying to access a protected or admin URL
+  if (!user && [...protectedUrls, ...adminUrls].some(url => request.nextUrl.pathname.startsWith(url))) {
+    const loginUrl = request.nextUrl.clone()
+    loginUrl.pathname = '/login'
+    return NextResponse.redirect(loginUrl)
   }
 
-  // IMPORTANT: You *must* return the supabaseResponse object as it is. If you're
-  // creating a new response object with NextResponse.next() make sure to:
-  // 1. Pass the request in it, like so:
-  //    const myNewResponse = NextResponse.next({ request })
-  // 2. Copy over the cookies, like so:
-  //    myNewResponse.cookies.setAll(supabaseResponse.cookies.getAll())
-  // 3. Change the myNewResponse object to fit your needs, but avoid changing
-  //    the cookies!
-  // 4. Finally:
-  //    return myNewResponse
-  // If this is not done, you may be causing the browser and server to go out
-  // of sync and terminate the user's session prematurely!
+  // Check if user is trying to access an admin URL
+  if (user && adminUrls.some(url => request.nextUrl.pathname.startsWith(url))) {
+    const { data: userProfile } = await supabase
+      .from('profiles') // Adjust table name if needed
+      .select('role')  // Assuming the role field exists in the profile
+      .eq('id', user.id) // Match the profile to the current user
+      .single()
 
+    // Redirect if user does not have the admin role
+    if (userProfile?.role !== 'admin') {
+      const unauthorizedUrl = request.nextUrl.clone()
+      unauthorizedUrl.pathname = '/'
+      return NextResponse.redirect(unauthorizedUrl)
+    }
+  }
+
+  // Prevent authenticated users from visiting auth pages (e.g., login/signup)
+  if (user && authUrls.some(url => request.nextUrl.pathname.startsWith(url))) {
+    const homeUrl = request.nextUrl.clone()
+    homeUrl.pathname = '/'
+    return NextResponse.redirect(homeUrl)
+  }
+
+  // Return the supabaseResponse object
   return supabaseResponse
 }

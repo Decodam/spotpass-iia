@@ -27,7 +27,6 @@ export default async function Profile({uid}) {
         <DropdownMenuContent>
           <DropdownMenuLabel>My Account</DropdownMenuLabel>
           <DropdownMenuSeparator />
-          <DropdownMenuItem>Profile</DropdownMenuItem>
           <form action={logoutCurrentUser}>
             <button className="w-full">
               <DropdownMenuItem>Logout</DropdownMenuItem>
@@ -46,7 +45,7 @@ export async function getUserProfile(userId) {
   try {
     const { data, error } = await supabase
       .from('profiles')
-      .select('full_name, avatar_url, email')
+      .select('full_name, avatar_url, email, role')
       .eq('id', userId)
       .single();
 
@@ -61,7 +60,8 @@ export async function getUserProfile(userId) {
       displayName: data.full_name,
       email: data.email,
       avatarUrl: data.avatar_url,
-      fallbackName: getInitials(data.full_name)
+      fallbackName: getInitials(data.full_name),
+      role: data.role
     };
   } catch (err) {
     console.error('Unexpected error fetching user profile:', err);

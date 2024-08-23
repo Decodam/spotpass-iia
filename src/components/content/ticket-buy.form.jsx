@@ -1,5 +1,6 @@
 'use client'
 
+import imageCompression from 'browser-image-compression';
 import { useState } from "react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Label } from "@/components/ui/label"
@@ -8,13 +9,17 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Button } from "@/components/ui/button"
 import { Separator } from "@/components/ui/separator"
 import Image from "next/image"
+import { createClient } from "@/supabase/client.supa"
+import { useToast } from "@/components/ui/use-toast"
+import { useRouter } from 'next/navigation';
+
 
 // Define batches with their respective prices
 const batches = [
-  { name: "1st Year", price: "$10" },
-  { name: "2nd Year", price: "$15" },
-  { name: "3rd Year", price: "$20" },
-  { name: "Pass Out", price: "$25" },
+  { name: "1st year", price: "₹ 100", cost: 100 },
+  { name: "2nd year", price: "₹ 100", cost: 100 },
+  { name: "3rd year", price: "₹ 200", cost: 200 },
+  { name: "Passout", price: "₹ 150", cost: 150 },
 ];
 
 export default function TicketBuyForm({fullName, emailAddress, uid}) {
@@ -25,36 +30,123 @@ export default function TicketBuyForm({fullName, emailAddress, uid}) {
   const [foodPreference, setFoodPreference] = useState("non-veg")
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('');
-  
+  const { toast } = useToast()
+
+  const router = useRouter()
+
 
   const getQRurl = (selectedBatch) => {
     const batchCodes = {
-      "1st Year": "upi-1",
-      "2nd Year": "upi-2",
-      "3rd Year": "upi-3",
-      "Pass Out": "upi-passout",
+      "1st year": "100",
+      "2nd year": "100",
+      "3rd year": "200",
+      "Passout": "150",
     };
-    return `/${batchCodes[selectedBatch]}.png`; // Ensure this path matches your image storage location
+    return `/${batchCodes[selectedBatch]}.jpeg`; // Ensure this path matches your image storage location
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault()
-    setLoading(true)
-
-    // Simulate API call or processing time
-    setTimeout(() => {
-      setLoading(false)
-      alert("Ticket booked successfully!")
-      console.log({ name, email, batch, foodPreference, paymentProof })
-    }, 2000)
+  function generateTicketId() {
+    return Math.floor(100000000000 + Math.random() * 900000000000).toString();
   }
 
-  const handleImageChange = (e) => {
-    const file = e.target.files[0]
-    if (file) {
-      setPaymentProof(URL.createObjectURL(file))
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    let fileUrl = null;
+  
+    const supabase = createClient();
+  
+    try {
+      // Handle file upload if there's a payment proof
+      if (paymentProof) {
+        try {
+          // Upload the file
+          const { data: uploadData, error: uploadError } = await supabase.storage
+            .from('payment-screenshot') // Ensure this bucket exists
+            .upload(`${Date.now()}_${paymentProof.name}`, paymentProof);
+  
+          if (uploadError) {
+            throw new Error(uploadError.message);
+          }
+  
+  
+          fileUrl = `https://pkwpcvmgdabgbwwfawsg.supabase.co/storage/v1/object/public/payment-screenshot/${uploadData.path}`;
+  
+        } catch (error) {
+          // Handle file upload or URL retrieval errors
+          throw new Error(`File upload or URL retrieval failed: ${error.message}`);
+        }
+      }
+  
+      if (!fileUrl && paymentProof) {
+        throw new Error("Failed to obtain file URL");
+      }
+  
+      // Generate ticket ID
+      const ticketId = generateTicketId();
+  
+      // Insert data into tickets table
+      const { error: insertError } = await supabase
+        .from('tickets')
+        .insert([
+          {
+            id: ticketId,
+            profile_id: uid,
+            batch: batch,
+            screenshot: fileUrl, // Ensure fileUrl is included
+            holders_name: name,
+            holders_email: email,
+            price: batches.find(b => b.name === batch).cost,
+            verified: false,
+            admitted: false,
+            food_preferences: foodPreference,
+            food_received: false,
+          }
+        ]);
+  
+      if (insertError) {
+        throw new Error(insertError.message);
+      }
+  
+      toast({
+        title: "Ticket Booked!",
+        description: "Successfully Booked your ticket! See you on 5th 😉",
+      });
+  
+      // Redirect after successful booking
+      router.push("/");
+  
+    } catch (error) {
+      setError(error.message);
+    } finally {
+      setLoading(false);
     }
-  }
+  };
+  
+  
+  
+
+  const handleImageChange = async (e) => {
+    const file = e.target.files[0];
+    
+    if (file) {
+      try {
+        // Options for image compression
+        const options = {
+          maxSizeMB: 1,           // Max size in MB
+          maxWidthOrHeight: 800,  // Max width or height
+          useWebWorker: true,     // Use web workers for faster compression
+        };
+  
+        // Compress the image file
+        const compressedFile = await imageCompression(file, options);
+  
+        setPaymentProof(compressedFile); // Store the compressed file object for upload
+      } catch (error) {
+        console.error("Image compression error:", error);
+      }
+    }
+  };
 
   const selectedBatch = batches.find(b => b.name === batch)
 
