@@ -56,7 +56,7 @@ const Ticket = ({ ticketId, name, email, batch, isAdmitted, isVeg, isFoodDeliver
             </div>
             <div>
               <p className="text-sm font-medium">Food Preference</p>
-              <p className="text-sm text-muted-foreground">{isVeg ? "Vegetarian" : "Non-Vegetarian"}</p>
+              <p className="text-sm text-muted-foreground">{isVeg === "veg" ? "Vegetarian" : "Non-Vegetarian"}</p>
             </div>
           </div>
         </div>
