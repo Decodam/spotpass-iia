@@ -35,6 +35,7 @@ export default async function TicketList() {
           batch={ticket.batch}
           ticketId={ticket.id}
           isAdmitted={ticket.admitted}
+          isVeg={ticket.food_preferences}
           isFoodDelivered={ticket.food_received}
           verified={ticket.verified}
         />
