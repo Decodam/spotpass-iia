@@ -10,6 +10,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { logoutCurrentUser } from "@/server/auth.actions";
+import Link from "next/link";
 
 export default async function Profile({uid}) {
 
@@ -27,6 +28,7 @@ export default async function Profile({uid}) {
         <DropdownMenuContent>
           <DropdownMenuLabel>My Account</DropdownMenuLabel>
           <DropdownMenuSeparator />
+          {user?.role === "admin" && <Link href={"/admin"}><DropdownMenuItem>Admin</DropdownMenuItem></Link>}
           <form action={logoutCurrentUser}>
             <button className="w-full">
               <DropdownMenuItem>Logout</DropdownMenuItem>
