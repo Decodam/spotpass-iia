@@ -1,18 +1,17 @@
 import { Separator } from "@/components/ui/separator"
 import { Badge } from "@/components/ui/badge"
 import QRCode from "react-qr-code"
-import { IconMoodCheck, IconSalad } from '@tabler/icons-react'
+import { IconExclamationCircle, IconMoodCheck, IconSalad } from '@tabler/icons-react'
 
 
 const eventDetails = {
   name: "IIA - Teachers Day 2024",
-  location: "Mohit Moitra Mancha",
-  timings: "1pm-5pm",
-  date: "September 15, 2024",
+  location: "Birendra Mancha",
+  date: "September 14, 2024",
   duration: "01:00 PM - 05:00 PM"
 }
 
-const Ticket = ({ ticketId, name, email, batch, isAdmitted, isVeg, isFoodDelivered }) => {
+const Ticket = ({ ticketId, name, email, batch, isAdmitted, isVeg, isFoodDelivered, verified }) => {
   const currentPath = 'https://glitch-a-gala.vercel.app/';
   
   
@@ -63,17 +62,26 @@ const Ticket = ({ ticketId, name, email, batch, isAdmitted, isVeg, isFoodDeliver
         </div>
         <Separator className="my-4" />
         <div className="flex flex-wrap gap-2">
-          {isAdmitted && (
-            <Badge className="flex items-center gap-1 mb-4">
-              <IconMoodCheck size={16} />
-              Admitted
+          {verified ? (
+            <>
+              {isAdmitted && (
+                <Badge className="flex items-center gap-1 mb-4">
+                  <IconMoodCheck size={16} />
+                  Admitted
+                </Badge>
+              )}
+              {isFoodDelivered && (
+                <Badge variant="outline" className="flex items-center gap-1 mb-4">
+                  <IconSalad size={16} /> Food Received
+                </Badge>
+              )}
+            </>
+          ) : (
+            <Badge variant="destructive" className="flex items-center gap-1 mb-4">
+              <IconExclamationCircle size={16} /> Not Verified
             </Badge>
           )}
-          {isFoodDelivered && (
-            <Badge variant="outline" className="flex items-center gap-1 mb-4">
-              <IconSalad size={16} /> Food Received
-            </Badge>
-          )}
+          
         </div>
 
         {/* Disclaimer and Contact Information */}

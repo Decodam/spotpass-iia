@@ -22,11 +22,12 @@ const batches = [
   { name: "Passout", price: "₹ 150", cost: 150 },
 ];
 
+
 export default function TicketBuyForm({fullName, emailAddress, uid}) {
   const [name, setName] = useState(fullName ? fullName : "")
   const [email, setEmail] = useState(emailAddress ? emailAddress : "")
   const [paymentProof, setPaymentProof] = useState(null)
-  const [batch, setBatch] = useState(batches[0].name)
+  const [batch, setBatch] = useState()
   const [foodPreference, setFoodPreference] = useState("non-veg")
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('');
@@ -110,7 +111,7 @@ export default function TicketBuyForm({fullName, emailAddress, uid}) {
   
       toast({
         title: "Ticket Booked!",
-        description: "Successfully Booked your ticket! See you on 5th 😉",
+        description: "Successfully Booked your ticket! See you on 14th 😉",
       });
   
       // Redirect after successful booking
@@ -188,7 +189,7 @@ export default function TicketBuyForm({fullName, emailAddress, uid}) {
                 <div className="flex space-x-4">
                   <div className="flex-1 space-y-2">
                     <Label htmlFor="batch">Batch</Label>
-                    <Select value={batch} onValueChange={setBatch}>
+                    <Select required value={batch} onValueChange={setBatch}>
                       <SelectTrigger id="batch">
                         <SelectValue placeholder="Select your batch" />
                       </SelectTrigger>
@@ -232,21 +233,30 @@ export default function TicketBuyForm({fullName, emailAddress, uid}) {
                 {error && <p className="text-xs text-destructive">{error}</p>}
 
                 <Button type="submit" size="lg" className="w-full" disabled={loading}>
-                  {loading ? "Processing..." : `Book Ticket (${selectedBatch.price})`}
+                  {loading ? "Processing..." : selectedBatch ? `Buy Ticket (${selectedBatch.price})` : "Buy Ticket"}
                 </Button>
                 <p className="text-xs text-muted-foreground"><strong>Disclaimer:</strong> Tickets are non-refundable and non-transferable. Please ensure all details are correct before purchasing. By buying a ticket, you agree to comply with the event&apos;s terms and conditions. For any issues or inquiries, contact the event organizers.</p>
               </form>
             </div>
             <Separator orientation="vertical" className="mx-6 h-full" />
             <div className="flex flex-col flex-[1] items-center justify-center">
-              <Label className="mb-2">Scan QR Code to buy ticket</Label>
-              <Image 
-                src={getQRurl(batch)} 
-                alt={`batch-${batch}`} 
-                height={0} 
-                width={300} 
-                className="h-auto" 
-              />
+              {batch ? (
+                <>
+                  <Label className="mb-2">Scan QR Code to buy ticket</Label>
+                  <Image 
+                    src={getQRurl(batch)} 
+                    alt={`batch-${batch}`} 
+                    height={0} 
+                    width={300} 
+                    className="h-auto" 
+                  />
+                </>
+              ) : (
+                <>
+                  <Label className="mb-4">Select Batch to generate QR Code</Label>
+                  <div className='size-72 bg-muted rounded-lg' />
+                </>
+              )}
             </div>
           </div>
         </CardContent>

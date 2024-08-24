@@ -1,7 +1,6 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { IconMoodCheck, IconPizza, IconCheck } from "@tabler/icons-react";
-import { getUserProfile } from "@/components/auth/profile";
 import { redirect } from "next/navigation";
 import { createClient } from "@/supabase/server.supa";
 import { Button } from "@/components/ui/button";
@@ -12,20 +11,6 @@ export default async function Component({ params }) {
 
   const supabase = createClient();
 
-  // Get the current user and validate admin role
-  const { data: userData, error: userError } = await supabase.auth.getUser();
-  if (userError || !userData?.user) {
-    redirect("/");
-  }
-
-  const userId = userData.user.id;
-
-  const user = await getUserProfile(userId);
-
-  if (user.role !== "admin") {
-    redirect("/");
-  }
-
   // Fetch ticket data from Supabase
   const { data: ticket, error: ticketError } = await supabase
     .from('tickets')
@@ -33,12 +18,10 @@ export default async function Component({ params }) {
     .eq('id', ticketID)
     .single();
 
-  if (ticketError || !ticket) {
-    // Handle error or no ticket found
-    return <div>Error loading ticket details</div>;
+  if (ticketError || !ticket || !ticket.verified) {
+    return redirect("/");
   }
 
-  // If the ticket is not admitted, set it to admitted
   if (!ticket.admitted) {
     const { error: updateError } = await supabase
       .from('tickets')
@@ -46,14 +29,11 @@ export default async function Component({ params }) {
       .eq('id', ticketID);
 
     if (updateError) {
-      // Handle update error
       return <div>Error updating ticket status</div>;
     }
   }
 
-  let foodReceived = ticket.food_received
-
-
+  const foodReceived = ticket.food_received;
   const ticketHolderName = ticket.holders_name || "N/A";
   const foodItem = ticket.food_preferences || "N/A";
 

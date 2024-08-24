@@ -21,10 +21,10 @@ export default function Hero() {
             </Link>
           </div>
           <h1 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl lg:text-6xl">
-            What&apos;s your plan for 15th Sep?
+            What&apos;s your plan for 14th Sep?
           </h1>
           <p className="max-w-[600px] text-muted-foreground md:text-xl lg:text-lg">
-            Join us in celebrating Teachers&apos; Day on 15th September 2024 from 1 PM to 5 PM. It&apos;s going to be a day filled
+            Join us in celebrating Teachers&apos; Day on 14th September 2024 from 1 PM to 5 PM. It&apos;s going to be a day filled
             with fun, laughter, and appreciation for our beloved teachers.
           </p>
           <Link

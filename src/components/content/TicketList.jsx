@@ -36,6 +36,7 @@ export default async function TicketList() {
           ticketId={ticket.id}
           isAdmitted={ticket.admitted}
           isFoodDelivered={ticket.food_received}
+          verified={ticket.verified}
         />
       ))}
     </div>
