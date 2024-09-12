@@ -232,7 +232,7 @@ export default function TicketBuyForm({fullName, emailAddress, uid}) {
 
                 {error && <p className="text-xs text-destructive">{error}</p>}
 
-                <Button type="submit" size="lg" className="w-full" disabled={loading}>
+                <Button type="submit" size="lg" className="w-full" disabled={true}>
                   {loading ? "Processing..." : selectedBatch ? `Buy Ticket (${selectedBatch.price})` : "Buy Ticket"}
                 </Button>
                 <p className="text-xs text-muted-foreground"><strong>Disclaimer:</strong> Tickets are non-refundable and non-transferable. Please ensure all details are correct before purchasing. By buying a ticket, you agree to comply with the event&apos;s terms and conditions. For any issues or inquiries, contact the event organizers.</p>
